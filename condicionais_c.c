@@ -1,19 +1,22 @@
 #include <stdio.h>
 
-struct salario {
-  float valor_salario
-};
+int main()
+{
+ float salario;
 
+ printf("informe seu salario: ");
+ scanf("%.2f", &salario);
 
-int main(void) {struct salario sa;
+ if(salario <= 1212,00) {
+  printf("aliquota 7,5%");
+ } 
+ else if (salario > 1212,01 && salario <= 2427,35)
+ {
+  printf("aliquota 9%");
+ }
+  else if (salario > 2427,36 && salario <= 3641,03)
+ {
+  printf("aliquota 12%");
+ }
 
-  printf("Informe seu salario: ");
-  scanf("\n %f", &sa.valor_salario);
-  
-  if (sa.valor_salario <= 1045,00)
-  {
-    printf("INSS a ser pago é 7,5%");
-  } else if (sa.valor_salario > 1045,01 && sa.valor_salario <= 2089,60); {
-    printf("INSS a ser pago é 9%");
-  };
 }
