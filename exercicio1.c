@@ -3,7 +3,7 @@
 #define TAM_NOME_CLIENTE 100;
 
 struct cliente {
-    char nome[TAM_NOME_CLIENTE];
+    char nome[TAM_NOME_CLIENTE]
     int idade;
 };
 
