@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define TAM_NOME_CLIENTE 100
+#define TAM_NOME_CLIENTE 100;
 
 struct cliente {
     char nome[TAM_NOME_CLIENTE];
