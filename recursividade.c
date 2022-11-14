@@ -1,18 +1,20 @@
-#include<stdio.h>
-int somar(int valor) {
-    if(valor == 0) {
-        //critério de parada
-        return valor;
+#include <stdio.h>
+int fatorialCauda(int n) {
+    return fatorialAux(n, 1);
+}
+
+int fatorialAux(int n, int parcial) {
+    if (n != 1) {
+        return fatorialAux(n - 1, parcial * n);
     } else {
-        //chamada recursiva
-        return valor + somar(valor - 1); 
+        return parcial;
     }
 }
 int main() {
     int n, resultado;
     printf("\nDigite um número inteiro positivo: ");
     scanf("%d", &n);
-    resultado = somar(n); // primeira chamada da função
-    printf("\nResultado = %d",resultado);
+    resultado = fatorialCauda(n);
+    printf("\nResultado do fatorial = %d", resultado);
     return 0;
 }
