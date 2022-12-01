@@ -1,106 +1,109 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
+#include <stdio.h>    // para operações de entrada e saída
+#include <stdlib.h>   // para alocação dinâmica de memória
+#include <stdbool.h>  // para uso do tipo de dados “bool”
+#include <assert.h>   // para uso da instrução “assert”
 
 struct No {
     int info;
     struct No* proximo;
 };
 
-struct Pilha {
-    struct No* topo;
+struct Fila {
+    struct No* inicio;
+    struct No* fim;
     int tamanho;
 };
 
-struct Pilha* criar() {
-    struct Pilha* nova_pilha = (struct Pilha*) malloc(sizeof(struct Pilha));
-    if (nova_pilha != NULL) {
-        nova_pilha->topo = NULL;
-        nova_pilha->tamanho = 0;
-    }
-    return nova_pilha;
-}
 
-void empilhar(struct Pilha* p, int item) {
-    assert(p != NULL);    
+struct Fila* criar() {
+    struct Fila* nova_fila = (struct Fila*) malloc(sizeof(struct Fila));
+    if (nova_fila != NULL) {
+        nova_fila->inicio = NULL;
+        nova_fila->fim = NULL;
+        nova_fila->tamanho = 0;
+    }
+    return nova_fila;
+};
+
+void enfileirar(struct Fila* f, int item) {
+    assert(f != NULL);    
     struct No* novo_no = (struct No*) malloc(sizeof(struct No));
     if (novo_no != NULL) {
         novo_no->info = item;
-        novo_no->proximo = p->topo;
-        p->topo = novo_no;
-        p->tamanho++;
-    }
-}
+        novo_no->proximo = NULL;
 
-int desempilhar(struct Pilha* p) {
-    assert(p != NULL);    
-    assert(p->topo != NULL);
-    struct No* aux = p->topo;
-    int elemento = aux->info;
-    p->topo = aux->proximo;
-    p->tamanho--; 
-    free(aux);
-    return elemento;    
-}
-
-int topo(struct Pilha* p) {
-    assert(p != NULL);
-    assert(p->topo != NULL);
-    struct No* topo = p->topo;
-    return topo->info;
-}
-
-int tamanho(struct Pilha* p) {
-    assert(p != NULL);
-    return p->tamanho;
-}
-
-bool vazia(struct Pilha* p) {
-    assert(p != NULL);
-    return (p->topo == NULL);
-}
-
-void liberar(struct Pilha* p) {
-    assert(p != NULL);
-    while(vazia(p) == false) {
-       desempilhar(p); 
-    }
-    free(p);
-}
-
-bool combina(char cl, char c2) {
-    switch (cl) {
-        case ')': return c2 == ')';
-        case '}': return c2 == '}';
-        case ']': return c2 == ']';
-        default: return false;
-
-    }
+	if (f->fim != NULL) {
+            f->fim->proximo = novo_no;   
+        } else {        
+            f->inicio = novo_no;
+        }
+        f->fim = novo_no;
+        f->tamanho++;
+    };
 };
 
-bool validar(char exp[], int tam) {
-    struct Pilha* p = criar();
-    for(int i = 0; i < tam; i++) {
-        char c = exp[i];
-        switch(c) {
-            case '(':
-            case '{':
-            case '[': empilhar(p, c); break;
-            case ')':
-            case '}':
-            case ']': {
-                if(vazia(p) == true) return false;
-                if(combina(c, desempilhar(p)) == false) return false;
-            }
-        }
+int desenfileirar(struct Fila* f) {
+    assert(f != NULL);    
+    assert(f->inicio != NULL);
+    struct No* aux = f->inicio;
+    int elemento = aux->info;
+    f->inicio = aux->proximo;
+    if (f->inicio == NULL) {
+        f->fim = NULL;    
     }
-    return (vazia(p));
-}
+    f->tamanho--; 
+    free(aux);
+    return elemento;    
+};
 
-int main() {
-    char exp[] = "{([])}";
-    printf("%d", validar(exp, 6));
+bool vazia(struct Fila* f) {
+    assert(f != NULL);        
+    return (f->inicio == NULL);    
+};
 
+int tamanho(struct Fila* f) {
+    assert(f != NULL);        
+    return f->tamanho;    
+};
+
+int inicio(struct Fila* f) {
+    assert(f != NULL);     
+    assert(f->inicio != NULL);         
+    return f->inicio->info;    
+};
+
+void liberar(struct Fila* f) {
+    assert(f != NULL);     
+    while(f->inicio != NULL) {
+        desenfileirar(f); 
+    }
+    free(f);    
+};
+
+int main() {  
+    struct Fila* minha_fila = criar();
+
+    enfileirar(minha_fila, 1);
+    enfileirar(minha_fila, 2);
+    enfileirar(minha_fila, 3);
+    enfileirar(minha_fila, 4);
+    enfileirar(minha_fila, 5);
+    enfileirar(minha_fila, 6);
+    enfileirar(minha_fila, 7);
+    enfileirar(minha_fila, 8);
+      
+    printf("Tamanho: %d ", tamanho(minha_fila));
+
+    printf("\nMinha fila: [%d ", desenfileirar(minha_fila));
+    printf("%d ", desenfileirar(minha_fila));
+    printf("%d ", desenfileirar(minha_fila));
+    printf("%d ", desenfileirar(minha_fila));
+    printf("%d]\n", desenfileirar(minha_fila));
+
+    printf("Tamanho: %d ", tamanho(minha_fila));
+    printf("\nEstá vazia (1 - Sim, 0 - Não)? %d ", vazia(minha_fila));
+
+    liberar(minha_fila);  
+    
     return 0;
-}
+};
